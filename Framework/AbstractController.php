@@ -6,7 +6,12 @@ abstract Class AbstractController
 {
 	public function render($view, array $params = array())
 	{
-		//extract($params);
+		extract($params);
 		require_once(DIR_VIEW . $view);
+	}
+	
+	public function redirectToUrl($action)
+	{
+		header('Location : index.php?action='.$action);
 	}
 }

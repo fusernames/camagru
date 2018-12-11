@@ -12,8 +12,8 @@ Class Router
 
 	public function __construct()
 	{
-		$userController = new UserController;
-		$indexController = new indexController;
+		$this->userController = new UserController();
+		$this->indexController = new IndexController();
 	}
 	
 	private function getParam($key, $default = 0)
@@ -22,11 +22,6 @@ Class Router
 		if (isset($_GET[$key]))
 			$id = $_GET[$key];
 		return ($id);
-	}
-
-	public function redirectToUrl($route)
-	{
-		header('Location : index.php?action='.$route);
 	}
 
 	public function handleRequest()
@@ -43,9 +38,6 @@ Class Router
 		if (!$route)
 			$route = $_GET['action'];
 		switch ($route) {
-			case '':
-				$this->indexController->index();
-				break;
 			case 'index':
 				$this->indexController->index();
 				break;
