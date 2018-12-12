@@ -1,7 +1,5 @@
 <?php
 
-use Controller\UserController;
-
 spl_autoload_register(function($className) {
 	$className = str_replace('\\', '/', $className);
 	$className = strtolower($className.'.php');
