@@ -42,6 +42,4 @@ Class User
 		if (!$this->password || strlen($this->password) < 2)
 			return AlertManager::addAlert('danger', 'Mot de passe invalide');	
 	}
-
-	public function
 }

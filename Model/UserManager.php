@@ -2,6 +2,8 @@
 
 namespace Model;
 
+use Model\User;
+
 Class UserManager
 {
 	public static function checkRegister($user)
