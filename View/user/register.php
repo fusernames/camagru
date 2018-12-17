@@ -1,9 +1,14 @@
 <?php $title = 'S\'enregistrer' ?>
 <?php ob_start() ?>
 
-<h3 class="text-center">Register</h3>
+<h3 class="text-center">S'enregistrer</h3>
 <div class="row">
 	<div class="mx-auto col-sm-8 col-md-6 col-lg-4">
+		<?php foreach($alerts as $alert) : ?>
+		<div class="alert alert-<?= $alert['type'] ?>">
+			<?= $alert['message'] ?>
+		</div>
+		<?php endforeach ?>
 		<form method="POST" class="clearfix">
 			<div class="form-group">
 			<label for="email">Adresse email</label>

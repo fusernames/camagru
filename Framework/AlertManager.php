@@ -15,6 +15,8 @@ Class AlertManager
 
 	static public function addAlert($type, $message)
 	{
+		if (!isset($_SESSION['alerts']))
+			$_SESSION['alerts'] = array();
 		$alert['type'] = $type;
 		$alert['message'] = $message;
 		array_push($_SESSION['alerts'], $alert);	

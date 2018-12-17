@@ -3,6 +3,7 @@
 namespace Model;
 
 use Model\User;
+use Framework\AlertManager;
 
 Class UserManager
 {
@@ -11,12 +12,12 @@ Class UserManager
 		global $APP;
 		$errors = 0;
 	
-		$errors += checkEmail();
-		$errors += checkUsername();
-		$errors += checkPassword();
-		if ($APP->dbManager->execute('SELECT count(*) FROM users WHERE email = '. $this->email))
+		$errors += $user->checkEmail();
+		$errors += $user->checkUsername();
+		$errors += $user->checkPassword();
+		if ($APP->pdo->query('SELECT COUNT(*) FROM users')->fetchColumn())
 			$errors += AlertManager::addAlert('danger', 'Cet email est deja utilise');
-		if ($APP->dbManager->execute('SELECT count(*) FROM users WHERE username = '. $this->username))
+		if ($APP->pdo->query('SELECT COUNT(*) FROM users')->fetchColumn())
 			$errors += AlertManager::addAlert('danger', 'Ce nom d\'utilisateur est deja utilise');
 		return $errors;
 	}
@@ -26,12 +27,29 @@ Class UserManager
 		global $APP;
 
 		$user = new User();
-		$user->setEmail($_POST['email']);
-		$user->setUsername($_POST['username']);
-		$user->setPassword($_POST['password']);
-		if (self::checkRegister())
+		$user->email = ($_POST['email']);
+		$user->username = ($_POST['username']);
+		$user->password = ($_POST['password']);
+		if (self::checkRegister($user))
 			return 1;
 		$user->hashPassword();
-		self::saveUser();
+		$APP->pdo->prepare('INSERT INTO users VALUES (?, ?, ?, ?)');
 	}
+
+	public static function getUserById($id)
+	{
+		global $APP;
+
+		$stmt = $APP->dbManager->execute('SELECT * FROM users WHERE id = '.$id);
+		return $stmt->fetchObject(User);
+	}
+	
+	public static function getUserBy($key, $value)
+	{
+		global $APP;
+
+		$stmt = $APP->dbManager->execute('SELECT * FROM users WHERE '.$key.' = '.$value);
+		return $stmt->fetchObject(User);
+	}
+
 }

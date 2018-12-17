@@ -1,6 +1,8 @@
 <?php
 
-class dbManager
+namespace Framework;
+
+class DbManager
 {
 	private $pdo;
 
@@ -11,8 +13,8 @@ class dbManager
 		global $DB_PASSWORD;
 
 		try {
-			$this->pdo = new PDO($DB_DSN, $DB_USER, $DB_PASSWORD);
-			$this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+			$this->pdo = new \PDO($DB_DSN, $DB_USER, $DB_PASSWORD);
+			$this->pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
 		} catch (PDOException $e) {
 			echo 'Échec lors de la connexion : ' . $e->getMessage();
 		}
@@ -20,6 +22,11 @@ class dbManager
 
 	public function execute($request)
 	{
+		return $this->pdo->query($request);
+	}
 
+	public function getPdo()
+	{
+		return $this->pdo;
 	}
 }

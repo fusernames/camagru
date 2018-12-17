@@ -2,27 +2,19 @@
 
 namespace Model;
 
+use Framework\AlertManager;
+
 Class User
 {
-	private $id;
-	private $email;
-	private $username;
-	private $password;
-	private $role = 'user';
+	public $id;
+	public $email;
+	public $username;
+	public $password;
+	public $role = 'user';
 
 	public function hashPassword()
 	{
 		$this->password = hash('md5', $this->password);
-	}
-
-	public function setPassword($password)
-	{
-		$this->password = $password;
-	}
-
-	public function getPassword()
-	{
-		return $this->password;
 	}
 	
 	public function checkEmail()
