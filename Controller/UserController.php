@@ -4,6 +4,7 @@ namespace Controller;
 
 use Framework\AbstractController;
 use Model\UserManager;
+use Model\Security;
 
 Class UserController extends AbstractController
 {
@@ -33,19 +34,33 @@ Class UserController extends AbstractController
 	{
 		if (isset($_SESSION['id']))
 			unset($_SESSION['id']);
-		return $this->redirectToUrl('index');
+		header('Location: '.$_SERVER['HTTP_REFERER']);
 	}
 
 	public function edit($id)
 	{
-		Security::AccessUserOnly();
-		Security::User($user, 'edit');
+		Security::accessUserOnly();
+		if (!($user = UserManager::getUserById($id)))
+			Security::notFound();
+		if (!Security::user($user, 'edit'))
+			Security::unauthorized();
+		if ($_SERVER['REQUEST_METHOD'] == 'POST')
+			UserManager::edit($user);
+		$user = UserManager::getUserById($id);
+		return $this->render('user/edit.php', [
+			'user' => $user
+		]);
 	}
 
 	public function remove($id)
 	{
-		Security::AccessUserOnly();
-		Security::User($user, 'remove');
+		Security::accessAdminOnly();
+		if (!($user = UserManager::getUserById($id)))
+			Security::notFound();
+		if (!Security::user($user, 'remove'))
+			Security::unauthorized();
+		UserManager::remove($user);
+		header('Location: '.$_SERVER['HTTP_REFERER']);
 	}
 	
 }

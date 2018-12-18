@@ -10,6 +10,7 @@ Class User
 	public $email;
 	public $username;
 	public $password;
+	public $repassword = NULL;
 	public $role = 'user';
 
 	public static function hashPassword($pwd)
@@ -33,5 +34,21 @@ Class User
 	{
 		if (!$this->password || strlen($this->password) < 2)
 			return AlertManager::addAlert('danger', 'Mot de passe invalide');	
+		if ($this->repassword != $this->password)
+			return AlertManager::addAlert('danger', 'Mots de passe differents');
+	}
+
+	public function usernameExists()
+	{
+		global $APP;
+		if ($APP->pdo->query('SELECT username FROM users WHERE username = \''. $this->username .'\'')->fetchColumn())
+			return AlertManager::addAlert('danger', 'Ce nom d\'utilisateur est deja utilise');	
+	}
+	
+	public function emailExists()
+	{
+		global $APP;
+		if ($APP->pdo->query('SELECT email FROM users WHERE email = \''. $this->email .'\'')->fetchColumn())
+			return AlertManager::addAlert('danger', 'Cet email est deja utilise');
 	}
 }

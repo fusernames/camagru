@@ -2,6 +2,8 @@
 
 namespace Framework;
 
+use Model\Security;
+
 abstract Class AbstractController
 {
 	public function render($view, array $params = array())
@@ -9,7 +11,7 @@ abstract Class AbstractController
 		global $APP;
 		$alerts = AlertManager::showAlerts();
 		extract($params);
-		require_once(DIR_VIEW.$view);
+		require(DIR_VIEW.$view);
 	}
 	
 	public function redirectToUrl($action)

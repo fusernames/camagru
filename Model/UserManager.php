@@ -3,37 +3,49 @@
 namespace Model;
 
 use Model\User;
+use Model\Security;
 use Framework\AlertManager;
 
 Class UserManager
 {
-	public static function checkRegister($user)
+
+	public static function edit($user)
 	{
 		global $APP;
-		$errors = 0;
-	
-		$errors += $user->checkEmail();
-		$errors += $user->checkUsername();
-		$errors += $user->checkPassword();
-		if ($APP->pdo->query('SELECT email FROM users WHERE email = \''. $user->email .'\'')->fetchColumn())
-			$errors += AlertManager::addAlert('danger', 'Cet email est deja utilise');
-		if ($APP->pdo->query('SELECT username FROM users WHERE username = \''. $user->username .'\'')->fetchColumn())
-			$errors += AlertManager::addAlert('danger', 'Ce nom d\'utilisateur est deja utilise');
-		return $errors;
-	}
+		$edited = clone $user;
+		$edited->email = $_POST['email'];
+		$edited->username = $_POST['username'];
+		if ($_POST['password']) {
+			$edited->password = $_POST['password'];
+			$edited->repassword = $_POST['repassword'];
+		}
+		if (Security::user($user, 'edit_role') && $_POST['role'])
+			$edited->role = $_POST['role'];
+		if (self::checkEdit($user, $edited))
+			return 1;
+		if ($_POST['password'])
+			$edited->password = User::hashPassword($user->password);
 
+		$req = $APP->pdo->prepare('UPDATE users SET email = :email, username = :username, password = :password, role = :role WHERE id = :id');
+		$req->execute([
+			':email' => $edited->email,
+			':username' => $edited->username,
+			':password' => $edited->password,
+			':role' => $edited->role,
+			':id' => $edited->id
+		]);
+	}
 
 	public static function login()
 	{
 		global $APP;
 
-		$req = $APP->pdo->prepare('SELECT * FROM users WHERE username = ? AND password = ? LIMIT 1');
+		$req = $APP->pdo->prepare('SELECT * FROM users WHERE username = :username AND password = :password LIMIT 1');
 		$req->execute([
-			$_POST['username'],
-			User::hashPassword($_POST['password'])
+			':username' => $_POST['username'],
+			':password' => User::hashPassword($_POST['password'])
 		]);
 		$user = $req->fetchObject(User::class);
-		print_r($user);
 		if ($user)
 			$_SESSION['id'] = $user->id;
 		else
@@ -45,14 +57,56 @@ Class UserManager
 		global $APP;
 
 		$user = new User();
-		$user->email = ($_POST['email']);
-		$user->username = ($_POST['username']);
-		$user->password = ($_POST['password']);
+		$user->email = $_POST['email'];
+		$user->username = $_POST['username'];
+		$user->password = $_POST['password'];
+		$user->repassword = $_POST['repassword'];
 		if (self::checkRegister($user))
 			return 1;
 		$user->password = User::hashPassword($user->password);
-		$req = $APP->pdo->prepare('INSERT INTO users (email, username, password, role) VALUES (?, ?, ?, ?)');
-		$req->execute(array($user->email, $user->username, $user->password, $user->role));
+
+		$req = $APP->pdo->prepare('INSERT INTO users (email, username, password, role) VALUES (:email, :username, :password, :role)');
+		
+		$req->execute([
+			':email' => $user->email,
+			':username' => $user->username,
+			':password' => $user->password,
+			':role' => $user->role
+		]);
+	}
+
+	public static function remove($user)
+	{
+		global $APP;
+		$req = $APP->pdo->prepare('DELETE FROM user WHERE id = :id');
+		$req->execute([
+			':id' => $user->id
+		]);
+	}
+	
+	public static function checkRegister($user)
+	{
+		$errors = 0;	
+		$errors += $user->checkEmail();
+		$errors += $user->checkUsername();
+		$errors += $user->checkPassword();
+		$errors += $user->usernameExists();
+		$errors += $user->emailExists();
+		return $errors;
+	}
+
+	public static function checkEdit($user, $edited)
+	{
+		$errors = 0;	
+		$errors += $edited->checkEmail();
+		$errors += $edited->checkUsername();
+		if ($user->password != $edited->password)
+			$errors += $edited->checkPassword();
+		if ($user->username != $edited->username)
+			$errors += $edited->usernameExists();
+		if ($user->email != $edited->email)
+			$errors += $edited->emailExists();
+		return $errors;
 	}
 
 	public static function getUserById($id)
@@ -68,7 +122,7 @@ Class UserManager
 		global $APP;
 
 		$stmt = $APP->dbManager->execute('SELECT * FROM users WHERE '.$key.' = '.$value);
-		return $stmt->fetchObject(User);
+		return $stmt->fetchObject(User::class);
 	}
 
 }

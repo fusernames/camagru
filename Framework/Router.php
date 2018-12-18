@@ -16,6 +16,11 @@ Class Router
 		$this->indexController = new IndexController();
 	}
 	
+	public static function redirectToUrl($action)
+	{
+		header('Location: index.php?action='.$action);
+	}
+	
 	private function getParam($key, $default = 0)
 	{
 		$id = $default;

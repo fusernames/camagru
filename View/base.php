@@ -22,6 +22,9 @@
 				</li>
 				<?php else : ?>
 				<li class="nav-item">
+					<a class="nav-link" href="index.php?action=user_edit&id=<?= $APP->user->id ?>">Editer</a>
+				</li>
+				<li class="nav-item">
 					<a class="nav-link" href="index.php?action=logout">Deconnexion</a>
 				</li>
 				<?php endif; ?>
