@@ -8,13 +8,13 @@
 		<div class="alert alert-<?= $alert['type'] ?>">
 			<?= $alert['message'] ?>
 		</div>
-		<?php endforeach ?>
+		<?php endforeach; ?>
 		<form method="POST" class="clearfix">
 			<div class="form-group">
-			<label for="email">Adresse email</label>
+				<label for="email">Adresse email</label>
 				<input id="email" type="email" name="email" class="form-control" id="email">
 			</div>
-				<div class="form-group">
+			<div class="form-group">
 				<label for="username">Nom d'utilisateur</label>
 				<input type="text" name="username" class="form-control" id="username">
 			</div>

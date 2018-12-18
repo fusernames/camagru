@@ -14,4 +14,6 @@ include_once 'Config/database.php';
 
 $APP = new App();
 include_once 'Config/install.php';
+
+$APP->getCurrentUser();
 $APP->router->handleRequest();

@@ -12,14 +12,14 @@ Class User
 	public $password;
 	public $role = 'user';
 
-	public function hashPassword()
+	public static function hashPassword($pwd)
 	{
-		$this->password = hash('md5', $this->password);
+		return hash('md5', $pwd);
 	}
 	
 	public function checkEmail()
 	{
-		if (preg_match('/^[^\W][a-zA-Z0-9_]+(\.[a-zA-Z0-9_]+)*\@[a-zA-Z0-9_]+(\.[a-zA-Z0-9_]+)*\.[a-zA-Z]{2,4}$/', $this->email))
+		if (!$this->email || !preg_match('/^[^\W][a-zA-Z0-9_]+(\.[a-zA-Z0-9_]+)*\@[a-zA-Z0-9_]+(\.[a-zA-Z0-9_]+)*\.[a-zA-Z]{2,4}$/', $this->email))
 			return AlertManager::addAlert('danger', 'Adresse email invalide');
 	}
 

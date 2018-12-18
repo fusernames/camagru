@@ -14,6 +14,6 @@ abstract Class AbstractController
 	
 	public function redirectToUrl($action)
 	{
-		header('Location : index.php?action='.$action);
+		header('Location: index.php?action='.$action);
 	}
 }

@@ -44,6 +44,9 @@ Class Router
 			case 'login':
 				$this->userController->login();
 				break;
+			case 'logout':
+				$this->userController->logout();
+				break;
 			case 'register':
 				$this->userController->register();
 				break;

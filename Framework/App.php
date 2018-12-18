@@ -4,6 +4,7 @@ namespace Framework;
 
 use Framework\DbManager;
 use Framework\Router;
+use Model\UserManager;
 
 class App
 {
@@ -15,6 +16,10 @@ class App
 	{
 		$this->connectDb();
 		$this->router = new Router();
+	}
+
+	public function getCurrentUser()
+	{
 		if (isset($_SESSION['id']))
 			$this->user = UserManager::getUserById($_SESSION['id']);
 	}
