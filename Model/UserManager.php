@@ -65,8 +65,7 @@ Class UserManager
 			return 1;
 		$user->password = User::hashPassword($user->password);
 
-		$req = $APP->pdo->prepare('INSERT INTO users (email, username, password, role) VALUES (:email, :username, :password, :role)');
-		
+		$req = $APP->pdo->prepare('INSERT INTO users (email, username, password, role) VALUES (:email, :username, :password, :role)');		
 		$req->execute([
 			':email' => $user->email,
 			':username' => $user->username,
@@ -121,7 +120,7 @@ Class UserManager
 	{
 		global $APP;
 
-		$stmt = $APP->dbManager->execute('SELECT * FROM users WHERE '.$key.' = '.$value);
+		$stmt = $APP->pdo->query('SELECT * FROM users WHERE '.$key.' = '.$value);
 		return $stmt->fetchObject(User::class);
 	}
 
