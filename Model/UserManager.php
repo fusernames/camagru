@@ -8,6 +8,14 @@ use Framework\AlertManager;
 
 Class UserManager
 {
+	public static function sendEmail($user)
+	{
+		$to = $user->email;
+		$subject = 'Camagru - Verifier votre compte';
+		$message = 'localhost:8080/index.php?action=user_check_email&user_id='.$user->id.'&hash='.$user->hash;
+		$message = 'salut';
+		mail($to, $subject, $message);
+	}
 
 	public static function edit($user)
 	{
@@ -24,7 +32,7 @@ Class UserManager
 		if (self::checkEdit($user, $edited))
 			return 1;
 		if ($_POST['password'])
-			$edited->password = User::hashPassword($user->password);
+			$edited->password = User::hashWord($user->password);
 
 		$req = $APP->pdo->prepare('UPDATE users SET email = :email, username = :username, password = :password, role = :role WHERE id = :id');
 		$req->execute([
@@ -43,9 +51,11 @@ Class UserManager
 		$req = $APP->pdo->prepare('SELECT * FROM users WHERE username = :username AND password = :password LIMIT 1');
 		$req->execute([
 			':username' => $_POST['username'],
-			':password' => User::hashPassword($_POST['password'])
+			':password' => User::hashWord($_POST['password'])
 		]);
 		$user = $req->fetchObject(User::class);
+		if ($user && $user->active == 0)
+			return AlertManager::addAlert('danger', 'Email non verifie, regardez vos mails');
 		if ($user)
 			$_SESSION['id'] = $user->id;
 		else
@@ -63,15 +73,19 @@ Class UserManager
 		$user->repassword = $_POST['repassword'];
 		if (self::checkRegister($user))
 			return 1;
-		$user->password = User::hashPassword($user->password);
+		$user->password = User::hashWord($user->password);
 
-		$req = $APP->pdo->prepare('INSERT INTO users (email, username, password, role) VALUES (:email, :username, :password, :role)');		
+		$req = $APP->pdo->prepare('INSERT INTO users (email, username, password, role, hash, active) VALUES (:email, :username, :password, :role, :hash, :active)');
 		$req->execute([
 			':email' => $user->email,
 			':username' => $user->username,
 			':password' => $user->password,
-			':role' => $user->role
+			':role' => $user->role,
+			':hash' => $user->hash,
+			':active' => $user->active
 		]);
+		self::sendEmail($user);
+		die();
 	}
 
 	public static function remove($user)
@@ -111,7 +125,6 @@ Class UserManager
 	public static function getUserById($id)
 	{
 		global $APP;
-
 		$stmt = $APP->pdo->query('SELECT * FROM users WHERE id = '.$id);
 		return $stmt->fetchObject(User::class);
 	}
@@ -119,9 +132,7 @@ Class UserManager
 	public static function getUserBy($key, $value)
 	{
 		global $APP;
-
 		$stmt = $APP->pdo->query('SELECT * FROM users WHERE '.$key.' = '.$value);
 		return $stmt->fetchObject(User::class);
 	}
-
 }

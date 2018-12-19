@@ -12,8 +12,15 @@ Class User
 	public $password;
 	public $repassword = NULL;
 	public $role = 'user';
+	public $hash;
+	public $active = 0;
 
-	public static function hashPassword($pwd)
+	public function __construct()
+	{
+		$this->hash = self::hashWord(rand(0, 5000));
+	}
+
+	public static function hashWord($pwd)
 	{
 		return hash('md5', $pwd);
 	}
