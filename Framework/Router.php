@@ -15,12 +15,12 @@ Class Router
 		$this->userController = new UserController();
 		$this->indexController = new IndexController();
 	}
-	
+
 	public static function redirectToUrl($action)
 	{
 		header('Location: index.php?action='.$action);
 	}
-	
+
 	private function getParam($key, $default = 0)
 	{
 		$id = $default;
@@ -60,6 +60,9 @@ Class Router
 				break;
 			case 'user_remove':
 				$this->userController->remove($this->getParam('id'));
+				break;
+			case 'user_activate':
+				$this->userController->activate();
 				break;
 		}
 	}

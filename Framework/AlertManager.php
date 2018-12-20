@@ -19,8 +19,8 @@ Class AlertManager
 			$_SESSION['alerts'] = array();
 		$alert['type'] = $type;
 		$alert['message'] = $message;
-		array_push($_SESSION['alerts'], $alert);	
-		return (1);
+		array_push($_SESSION['alerts'], $alert);
+		return 1;
 	}
 
 	static public function hasType($type)

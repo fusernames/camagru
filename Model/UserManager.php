@@ -2,21 +2,13 @@
 
 namespace Model;
 
+use Framework\AlertManager;
 use Model\User;
 use Model\Security;
-use Framework\AlertManager;
+use Model\Email;
 
 Class UserManager
 {
-	public static function sendEmail($user)
-	{
-		$to = $user->email;
-		$subject = 'Camagru - Verifier votre compte';
-		$message = 'localhost:8080/index.php?action=user_check_email&user_id='.$user->id.'&hash='.$user->hash;
-		$message = 'salut';
-		mail($to, $subject, $message);
-	}
-
 	public static function edit($user)
 	{
 		global $APP;
@@ -47,7 +39,6 @@ Class UserManager
 	public static function login()
 	{
 		global $APP;
-
 		$req = $APP->pdo->prepare('SELECT * FROM users WHERE username = :username AND password = :password LIMIT 1');
 		$req->execute([
 			':username' => $_POST['username'],
@@ -65,7 +56,6 @@ Class UserManager
 	public static function register()
 	{
 		global $APP;
-
 		$user = new User();
 		$user->email = $_POST['email'];
 		$user->username = $_POST['username'];
@@ -74,7 +64,7 @@ Class UserManager
 		if (self::checkRegister($user))
 			return 1;
 		$user->password = User::hashWord($user->password);
-
+		$user->hash = User::hashWord(rand(0, 5000));
 		$req = $APP->pdo->prepare('INSERT INTO users (email, username, password, role, hash, active) VALUES (:email, :username, :password, :role, :hash, :active)');
 		$req->execute([
 			':email' => $user->email,
@@ -84,8 +74,8 @@ Class UserManager
 			':hash' => $user->hash,
 			':active' => $user->active
 		]);
-		self::sendEmail($user);
-		die();
+		Email::sendVerification($user);
+		AlertManager::addAlert('success', 'Enregistrement reussi, verifiez vos mails');
 	}
 
 	public static function remove($user)
@@ -96,10 +86,10 @@ Class UserManager
 			':id' => $user->id
 		]);
 	}
-	
+
 	public static function checkRegister($user)
 	{
-		$errors = 0;	
+		$errors = 0;
 		$errors += $user->checkEmail();
 		$errors += $user->checkUsername();
 		$errors += $user->checkPassword();
@@ -110,7 +100,7 @@ Class UserManager
 
 	public static function checkEdit($user, $edited)
 	{
-		$errors = 0;	
+		$errors = 0;
 		$errors += $edited->checkEmail();
 		$errors += $edited->checkUsername();
 		if ($user->password != $edited->password)
@@ -125,14 +115,16 @@ Class UserManager
 	public static function getUserById($id)
 	{
 		global $APP;
-		$stmt = $APP->pdo->query('SELECT * FROM users WHERE id = '.$id);
-		return $stmt->fetchObject(User::class);
+		$req = $APP->pdo->prepare('SELECT * FROM users WHERE id = ?');
+		$req->execute([$id]);
+		return $req->fetchObject(User::class);
 	}
-	
+
 	public static function getUserBy($key, $value)
 	{
 		global $APP;
-		$stmt = $APP->pdo->query('SELECT * FROM users WHERE '.$key.' = '.$value);
-		return $stmt->fetchObject(User::class);
+		$req = $APP->pdo->prepare("SELECT * FROM users WHERE $key = ? LIMIT 1");
+		$req->execute([$value]);
+		return $req->fetchObject(User::class);
 	}
 }

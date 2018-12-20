@@ -15,16 +15,11 @@ Class User
 	public $hash;
 	public $active = 0;
 
-	public function __construct()
-	{
-		$this->hash = self::hashWord(rand(0, 5000));
-	}
-
 	public static function hashWord($pwd)
 	{
 		return hash('md5', $pwd);
 	}
-	
+
 	public function checkEmail()
 	{
 		if (!$this->email || !preg_match('/^[^\W][a-zA-Z0-9_]+(\.[a-zA-Z0-9_]+)*\@[a-zA-Z0-9_]+(\.[a-zA-Z0-9_]+)*\.[a-zA-Z]{2,4}$/', $this->email))
@@ -34,13 +29,13 @@ Class User
 	public function checkUsername()
 	{
 		if (!$this->username)
-			return AlertManager::addAlert('danger', 'Nom d\'utilisateur invalide');	
+			return AlertManager::addAlert('danger', 'Nom d\'utilisateur invalide');
 	}
 
 	public function checkPassword()
 	{
 		if (!$this->password || strlen($this->password) < 2)
-			return AlertManager::addAlert('danger', 'Mot de passe invalide');	
+			return AlertManager::addAlert('danger', 'Mot de passe invalide');
 		if ($this->repassword != $this->password)
 			return AlertManager::addAlert('danger', 'Mots de passe differents');
 	}
@@ -49,13 +44,13 @@ Class User
 	{
 		global $APP;
 		if ($APP->pdo->query('SELECT username FROM users WHERE username = \''. $this->username .'\'')->fetchColumn())
-			return AlertManager::addAlert('danger', 'Ce nom d\'utilisateur est deja utilise');	
+			return AlertManager::addAlert('danger', 'Ce nom d\'utilisateur est deja utilisé');
 	}
-	
+
 	public function emailExists()
 	{
 		global $APP;
 		if ($APP->pdo->query('SELECT email FROM users WHERE email = \''. $this->email .'\'')->fetchColumn())
-			return AlertManager::addAlert('danger', 'Cet email est deja utilise');
+			return AlertManager::addAlert('danger', 'Cet email est deja utilisé');
 	}
 }
