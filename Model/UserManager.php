@@ -115,7 +115,7 @@ Class UserManager
 	public static function getUserById($id)
 	{
 		global $APP;
-		$req = $APP->pdo->prepare('SELECT * FROM users WHERE id = ?');
+		$req = $APP->pdo->prepare('SELECT * FROM users WHERE id = ? LIMIT 1');
 		$req->execute([$id]);
 		return $req->fetchObject(User::class);
 	}
