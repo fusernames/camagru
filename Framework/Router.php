@@ -64,6 +64,12 @@ Class Router
 			case 'user_activate':
 				$this->userController->activate();
 				break;
+			case 'user_send_reset':
+				$this->userController->send_reset();
+				break;
+			case 'user_reset_password':
+				$this->userController->reset_password();
+				break;
 		}
 	}
 }

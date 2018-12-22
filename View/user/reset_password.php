@@ -1,4 +1,4 @@
-<?php $title = 'Connexion' ?>
+<?php $title = 'Reinitialiser le mot de passe' ?>
 <?php ob_start() ?>
 
 <h3 class="text-center"><?= $title ?></h3>
@@ -11,16 +11,15 @@
 		<?php endforeach; ?>
 		<form method="POST" class="clearfix">
 			<div class="form-group">
-				<label for="username">Nom d'utilisateur</label>
-				<input type="text" name="username" class="form-control" id="username">
-			</div>
-			<div class="form-group">
 				<label for="password">Mot de passe</label>
 				<input type="password" name="password" class="form-control" id="password">
 			</div>
-			<button type="submit" class="btn btn-primary float-right">Se connecter</button>
+			<div class="form-group">
+				<label for="repassword">Retapez le mdp</label>
+				<input type="password" name="repassword" class="form-control" id="repassword">
+			</div>
+			<button type="submit" class="btn btn-primary float-right">Reinitialiser le mot de passe</button>
 		</form>
-		<a href="index.php?action=user_send_reset">Mot de passe oublie ?</a>
 	</div>
 </div>
 

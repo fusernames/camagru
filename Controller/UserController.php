@@ -4,8 +4,10 @@ namespace Controller;
 
 use Framework\AbstractController;
 use Framework\AlertManager;
+use Model\User;
 use Model\UserManager;
 use Model\Security;
+use Model\Email;
 
 Class UserController extends AbstractController
 {
@@ -42,9 +44,9 @@ Class UserController extends AbstractController
 	{
 		Security::accessUserOnly();
 		if (!($user = UserManager::getUserById($id)))
-			Security::notFound();
+			return Security::notFound();
 		if (!Security::user($user, 'edit'))
-			Security::unauthorized();
+			return Security::unauthorized();
 		if ($_SERVER['REQUEST_METHOD'] == 'POST')
 			UserManager::edit($user);
 		$user = UserManager::getUserById($id);
@@ -57,9 +59,9 @@ Class UserController extends AbstractController
 	{
 		Security::accessAdminOnly();
 		if (!($user = UserManager::getUserById($id)))
-			Security::notFound();
+			return Security::notFound();
 		if (!Security::user($user, 'remove'))
-			Security::unauthorized();
+			return Security::unauthorized();
 		UserManager::remove($user);
 		header('Location: '.$_SERVER['HTTP_REFERER']);
 	}
@@ -75,29 +77,30 @@ Class UserController extends AbstractController
 				AlertManager::addAlert('success', 'Email verifié');
 			}
 		}
-		$this->redirectToUrl('index');
+		$this->redirectToUrl('login');
 	}
 
 	public function send_reset()
 	{
 		if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-			if (isset($_POST['email']) {
+			if (isset($_POST['email'])) {
 				$user = UserManager::getUserBy('email', $_POST['email']);
-				if ($user)
+				if ($user) {
 					Email::sendReset($user);
 					AlertManager::addAlert('success', 'Email envoye');
 				} else {
 					AlertManager::addAlert('danger', 'Aucun resultat pour cet email');	
 				}
 			}
-		}	
-		$this->render('user/send_reset.php');
+		}
+		return $this->render('user/send_reset.php');
 	}
 
 	public function reset_password()
 	{
-		if (isset($_GET['hash'] && isset($_GET['username') {
-			$user = UserManager::getUserBy('username', $_GET['username'])
+		global $APP;
+		if (isset($_GET['hash']) && isset($_GET['username'])) {
+			$user = UserManager::getUserBy('username', $_GET['username']);
 			if ($user && $user->hash == $_GET['hash']) {
 				if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 					$user->password = $_POST['password'];
@@ -109,7 +112,9 @@ Class UserController extends AbstractController
 						$this->redirectToUrl('login');
 					}
 				}
-				$this->render('user/reset_password.php');
+				return $this->render('user/reset_password.php');
+			} else {
+				return Security::unauthorized();
 			}
 		}
 	}

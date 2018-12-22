@@ -22,12 +22,12 @@ Class Email
     self::sendEmail($to, $subject, $message);
   }
 
-  public static function sendForgotPassword($user)
+  public static function sendReset($user)
   {
     $to = $user->email;
     $subject = 'Camagru - Mot de passe oublié';
     $message = 'Cliquez sur ce lien pour reinitialiser votre mot de passe :'.self::NL;
-    $message .= 'http://localhost:8080/camagru/index.php?action=user_forgot&username='.$user->username.'&hash='.$user->hash.self::NL;
-    self::sendMail($to, $subject, $message);
+    $message .= 'http://localhost:8080/camagru/index.php?action=user_reset_password&username='.$user->username.'&hash='.$user->hash.self::NL;
+    self::sendEmail($to, $subject, $message);
   }
 }
