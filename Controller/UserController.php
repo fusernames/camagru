@@ -15,7 +15,7 @@ Class UserController extends AbstractController
 	{
 		if (isset($_SESSION['id']))
 			return $this->redirectToUrl('index');
-		if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+		if (!Security::checkForm(['email', 'username', 'password', 'repassword'])) {
 			if (!UserManager::register())
 				return $this->redirectToUrl('login');
 		}
@@ -26,9 +26,9 @@ Class UserController extends AbstractController
 	{
 		if (isset($_SESSION['id']))
 			return $this->redirectToUrl('index');
-		if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-			if (!UserManager::login())
-				return $this->redirectToUrl('index');
+		if (!Security::checkForm(['username', 'password'])) {
+				if (!UserManager::login())
+					return $this->redirectToUrl('index');
 		}
 		return $this->render('user/login.php');
 	}
@@ -43,11 +43,12 @@ Class UserController extends AbstractController
 	public function edit($id)
 	{
 		Security::accessUserOnly();
-		if (!($user = UserManager::getUserById($id)))
+		$user = UserManager::getUserById($id);
+		if (!$user)
 			return Security::notFound();
 		if (!Security::user($user, 'edit'))
 			return Security::unauthorized();
-		if ($_SERVER['REQUEST_METHOD'] == 'POST')
+		if (!Security::checkForm(['username', 'email', 'password', 'repassword']))
 			UserManager::edit($user);
 		$user = UserManager::getUserById($id);
 		return $this->render('user/edit.php', [
@@ -58,11 +59,13 @@ Class UserController extends AbstractController
 	public function remove($id)
 	{
 		Security::accessAdminOnly();
-		if (!($user = UserManager::getUserById($id)))
-			return Security::notFound();
-		if (!Security::user($user, 'remove'))
-			return Security::unauthorized();
-		UserManager::remove($user);
+		if (isset($_GET['token']) && $_GET['token'] == $_SESSION['token']) {
+			if (!($user = UserManager::getUserById($id)))
+				return Security::notFound();
+			if (!Security::user($user, 'remove'));
+				return Security::unauthorized();
+			UserManager::remove($user);
+		}
 		header('Location: '.$_SERVER['HTTP_REFERER']);
 	}
 
@@ -82,15 +85,13 @@ Class UserController extends AbstractController
 
 	public function send_reset()
 	{
-		if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-			if (isset($_POST['email'])) {
-				$user = UserManager::getUserBy('email', $_POST['email']);
-				if ($user) {
-					Email::sendReset($user);
-					AlertManager::addAlert('success', 'Email envoye');
-				} else {
-					AlertManager::addAlert('danger', 'Aucun resultat pour cet email');	
-				}
+		if (!Security::checkForm(['email'])) {
+			$user = UserManager::getUserBy('email', $_POST['email']);
+			if ($user) {
+				Email::sendReset($user);
+				AlertManager::addAlert('success', 'Email envoye');
+			} else {
+				AlertManager::addAlert('danger', 'Aucun resultat pour cet email');
 			}
 		}
 		return $this->render('user/send_reset.php');
@@ -102,7 +103,7 @@ Class UserController extends AbstractController
 		if (isset($_GET['hash']) && isset($_GET['username'])) {
 			$user = UserManager::getUserBy('username', $_GET['username']);
 			if ($user && $user->hash == $_GET['hash']) {
-				if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+				if (!Security::checkForm(['password', 'repassword'])) {
 					$user->password = $_POST['password'];
 					$user->repassword = $_POST['repassword'];
 					if (!$user->checkPassword()) {

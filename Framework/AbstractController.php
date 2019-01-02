@@ -13,7 +13,7 @@ abstract Class AbstractController
 		extract($params);
 		require(DIR_VIEW.$view);
 	}
-	
+
 	public function redirectToUrl($action)
 	{
 		header('Location: index.php?action='.$action);

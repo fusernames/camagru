@@ -10,3 +10,11 @@ $APP->pdo->query('CREATE TABLE IF NOT EXISTS users (
 	hash VARCHAR(255) NOT NULL,
 	active INT(11) NOT NULL DEFAULT 0
 )');
+$APP->pdo->query('CREATE TABLE IF NOT EXISTS pictures (
+	id INT AUTO_INCREMENT PRIMARY KEY,
+	author INT NOT NULL,
+	filename VARCHAR(255) NOT NULL,
+	description VARCHAR(5000) DEFAULT NULL,
+	creation_date TIMESTAMP NOT NULL,
+	FOREIGN KEY (author) REFERENCES users(id) ON DELETE CASCADE
+)');

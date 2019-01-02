@@ -34,7 +34,7 @@ Class User
 
 	public function checkPassword()
 	{
-		if (!$this->password || strlen($this->password) < 2)
+		if (!$this->password || strlen($this->password) < 5)
 			return AlertManager::addAlert('danger', 'Mot de passe invalide');
 		if ($this->repassword != $this->password)
 			return AlertManager::addAlert('danger', 'Mots de passe differents');

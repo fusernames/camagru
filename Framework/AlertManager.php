@@ -20,7 +20,10 @@ Class AlertManager
 		$alert['type'] = $type;
 		$alert['message'] = $message;
 		array_push($_SESSION['alerts'], $alert);
-		return 1;
+		if ($type == 'danger')
+			return 1;
+		else if ($type == 'success')
+			return 0;
 	}
 
 	static public function hasType($type)
