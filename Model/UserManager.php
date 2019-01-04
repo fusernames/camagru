@@ -26,7 +26,7 @@ Class UserManager
 		if ($_POST['password'])
 			$edited->password = User::hashWord($user->password);
 
-		$req = $APP->pdo->prepare('UPDATE users SET email = :email, username = :username, password = :password, role = :role WHERE id = :id');
+		$req = $APP->pdo->prepare('UPDATE user SET email = :email, username = :username, password = :password, role = :role WHERE id = :id');
 		$req->execute([
 			':email' => $edited->email,
 			':username' => $edited->username,
@@ -39,7 +39,7 @@ Class UserManager
 	public static function login()
 	{
 		global $APP;
-		$req = $APP->pdo->prepare('SELECT * FROM users WHERE username = :username AND password = :password LIMIT 1');
+		$req = $APP->pdo->prepare('SELECT * FROM user WHERE username = :username AND password = :password LIMIT 1');
 		$req->execute([
 			':username' => $_POST['username'],
 			':password' => User::hashWord($_POST['password'])
@@ -65,7 +65,7 @@ Class UserManager
 			return 1;
 		$user->password = User::hashWord($user->password);
 		$user->hash = User::hashWord(rand(0, 5000));
-		$req = $APP->pdo->prepare('INSERT INTO users (email, username, password, role, hash, active) VALUES (:email, :username, :password, :role, :hash, :active)');
+		$req = $APP->pdo->prepare('INSERT INTO user (email, username, password, role, hash, active) VALUES (:email, :username, :password, :role, :hash, :active)');
 		$req->execute([
 			':email' => $user->email,
 			':username' => $user->username,
@@ -115,7 +115,7 @@ Class UserManager
 	public static function getUserById($id)
 	{
 		global $APP;
-		$req = $APP->pdo->prepare('SELECT * FROM users WHERE id = ? LIMIT 1');
+		$req = $APP->pdo->prepare('SELECT * FROM user WHERE id = ? LIMIT 1');
 		$req->execute([$id]);
 		return $req->fetchObject(User::class);
 	}
@@ -123,7 +123,7 @@ Class UserManager
 	public static function getUserBy($key, $value)
 	{
 		global $APP;
-		$req = $APP->pdo->prepare("SELECT * FROM users WHERE $key = ? LIMIT 1");
+		$req = $APP->pdo->prepare("SELECT * FROM user WHERE $key = ? LIMIT 1");
 		$req->execute([$value]);
 		return $req->fetchObject(User::class);
 	}

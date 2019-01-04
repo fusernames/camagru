@@ -75,7 +75,7 @@ Class UserController extends AbstractController
 		if (isset($_GET['username']) && isset($_GET['hash'])) {
 			$user = UserManager::getUserBy('username', $_GET['username']);
 			if ($user && $user->hash == $_GET['hash']) {
-				$req = $APP->pdo->prepare('UPDATE users SET active = 1 WHERE id = ?');
+				$req = $APP->pdo->prepare('UPDATE user SET active = 1 WHERE id = ?');
 				$req->execute([$user->id]);
 				AlertManager::addAlert('success', 'Email verifié');
 			}
@@ -107,7 +107,7 @@ Class UserController extends AbstractController
 					$user->password = $_POST['password'];
 					$user->repassword = $_POST['repassword'];
 					if (!$user->checkPassword()) {
-						$req = $APP->pdo->prepare('UPDATE users SET password = ? WHERE id = ?');
+						$req = $APP->pdo->prepare('UPDATE user SET password = ? WHERE id = ?');
 						$req->execute([User::hashWord($user->password), $user->id]);
 						AlertManager::addAlert('success', 'Mot de passe mis a jour');
 						$this->redirectToUrl('login');

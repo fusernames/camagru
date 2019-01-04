@@ -1,11 +1,10 @@
 <?php
 
+use Framework\App;
+
 session_start();
 if (!isset($_SESSION['token']))
 	$_SESSION['token'] = hash('whirlpool', srand(50000, 200000));
-use Model\Security;	
-use Framework\App;
-use Framework\AlertManager;
 
 define ('DIR_MODEL', __DIR__.'/Model/');
 define ('DIR_VIEW', __DIR__.'/View/');

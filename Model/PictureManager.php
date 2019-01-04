@@ -20,7 +20,7 @@ Class PictureManager
 		if ($_POST['description'])
 			$pic->description = $_POST['description'];
 		$pic->mergePicture();
-		$req = $APP->pdo->prepare('INSERT pictures (author, filename, description) VALUES (:author, :filename, :description)');
+		$req = $APP->pdo->prepare('INSERT picture (author, filename, description) VALUES (:author, :filename, :description)');
 		$req->execute([
 			':author' => $pic->author,
 			':filename' => $pic->filename,
@@ -41,7 +41,7 @@ Class PictureManager
 	public static function getPictureById($id)
 	{
 		global $APP;
-		$req = $APP->pdo->prepare('SELECT * FROM pictures WHERE id = ? LIMIT 1');
+		$req = $APP->pdo->prepare('SELECT * FROM picture WHERE id = ? LIMIT 1');
 		$req->execute([$id]);
 		return $req->fetchObject(Picture::class);
 	}

@@ -25,9 +25,4 @@ Class AlertManager
 		else if ($type == 'success')
 			return 0;
 	}
-
-	static public function hasType($type)
-	{
-		return array_key_exists($type, $_SESSION['alerts']);
-	}
 }

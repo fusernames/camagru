@@ -18,4 +18,9 @@ abstract Class AbstractController
 	{
 		header('Location: index.php?action='.$action);
 	}
+
+	public function redirectBack()
+	{
+		header('Location: '.$_SERVER['HTTP_REFERER']);
+	}
 }

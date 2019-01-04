@@ -6,23 +6,44 @@ use Framework\AlertManager;
 
 class Security
 {
+
+	public static function comment($comment, $action)
+	{
+		global $APP;
+		
+		if (!$APP->user)
+			return FALSE;
+		if ($action == 'remove')
+			if ($comment->author == $APP->user->id || $APP->user->role == 'admin')
+				return TRUE;
+		if ($action == 'like') {
+			$req = $APP->pdo->prepare(
+				'SELECT * FROM picture_comment_like WHERE id_comment = :id_comment AND id_user = :id_user LIMIT 1'
+			);
+			$liked = $req->execute([
+				':id_comment' => $comment->id,
+				':id_user' => $APP->user->id
+			])->fetchColumn();
+			if (!$liked)
+				return TRUE;
+		}
+		return FALSE;
+	}
+
 	public static function user($user, $action)
 	{
 		global $APP;
 		if (!$APP->user)
 			return FALSE;
-		if ($action == 'edit') {
+		if ($action == 'edit')
 			if ($user->id == $APP->user->id || $APP->user->role == 'admin')
 				return TRUE;
-		}
-		if ($action == 'remove') {
+		if ($action == 'remove')
 			if ($APP->user->role == 'admin')
 				return TRUE;
-		}
-		if ($action == 'edit_role') {
+		if ($action == 'edit_role')
 			if ($APP->user->role == 'admin')
 				return TRUE;
-		}
 		return FALSE;
 	}
 
@@ -31,10 +52,9 @@ class Security
 		global $APP;
 		if (!$APP->user)
 			return FALSE;
-		if ($action == 'remove') {
+		if ($action == 'remove')
 			if ($APP->user->role == 'admin' || $picture->author == $APP->user->id)
 				return TRUE;
-		}
 		return FALSE;
 	}
 
@@ -54,7 +74,7 @@ class Security
 	{
 		global $APP;
 		if (!$APP->user) {
-			return ($APP->router->redirectToUrl($url));
+			return $APP->router->redirectToUrl($url);
 		}
 	}
 
@@ -62,7 +82,7 @@ class Security
 	{
 		global $APP;
 		if (!$APP->user || $APP->user->role != 'admin')
-			return ($APP->router->redirectToUrl($url));
+			return $APP->router->redirectToUrl($url);
 	}
 
 	public static function checkForm(array $posts, array $files = [])

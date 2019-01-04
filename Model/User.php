@@ -43,14 +43,14 @@ Class User
 	public function usernameExists()
 	{
 		global $APP;
-		if ($APP->pdo->query('SELECT username FROM users WHERE username = \''. $this->username .'\'')->fetchColumn())
+		if ($APP->pdo->query('SELECT username FROM user WHERE username = \''. $this->username .'\'')->fetchColumn())
 			return AlertManager::addAlert('danger', 'Ce nom d\'utilisateur est deja utilisé');
 	}
 
 	public function emailExists()
 	{
 		global $APP;
-		if ($APP->pdo->query('SELECT email FROM users WHERE email = \''. $this->email .'\'')->fetchColumn())
+		if ($APP->pdo->query('SELECT email FROM user WHERE email = \''. $this->email .'\'')->fetchColumn())
 			return AlertManager::addAlert('danger', 'Cet email est deja utilisé');
 	}
 }

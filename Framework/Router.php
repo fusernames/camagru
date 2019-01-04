@@ -5,18 +5,21 @@ namespace Framework;
 use Controller\UserController;
 use Controller\IndexController;
 use Controller\PictureController;
+use Controller\Picture\CommentController as PictureCommentController;
 
 Class Router
 {
 	private $userController;
 	private $indexController;
 	private $pictureController;
+	private $pictureCommentController;
 
 	public function __construct()
 	{
 		$this->userController = new UserController();
 		$this->indexController = new IndexController();
 		$this->pictureController = new PictureController();
+		$this->pictureCommentController = new PictureCommentController;
 	}
 
 	public static function redirectToUrl($action)
@@ -81,6 +84,18 @@ Class Router
 				break;
 			case 'picture_remove':
 				$this->pictureController->remove($this->getParam('id'));
+				break;
+			case 'picture_comment_create':
+				$this->pictureCommentController->create();
+				break;
+			case 'picture_comment_remove':
+				$this->pictureCommentController->remove($this->getParam('id'));
+				break;
+			case 'picture_comment_like':
+				$this->pictureCommentController->like($this->getParam('id'));
+				break;
+			case 'picture_comment_unlike':
+				$this->pictureCommentController->unlike($this->getParam('id'));
 				break;
 		}
 	}

@@ -40,9 +40,10 @@ Class PictureController extends AbstractController
 				return Security::notFound();
 			if (!Security::picture($picture, 'remove'))
 				return Security::unauthorized();
-			$APP->pdo->query("DELETE FROM pictures WHERE id = $picture->id");
+			unlink(DIR_PUBLIC.'pictures/'.$picture->name);
+			$APP->pdo->query("DELETE FROM picture WHERE id = $picture->id");
 			AlertManager::addAlert('success', 'Photo supprimee');
 		}
-		header('Location: '.$_SERVER['HTTP_REFERER']);
+		$this->redirectBack();
 	}
 }

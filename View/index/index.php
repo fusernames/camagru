@@ -17,7 +17,7 @@
 			<?php endif; ?>
 		<?php endfor; ?>
 		<li class="page-item active"><a class="page-link" href="#"><?= $page ?></a></li>
-		<?php for ($i = $page + 2; $page < $i; $i--) : ?>
+		<?php for ($i = $page + 1; $i <= $page + 2; $i++) : ?>
 			<?php if ($i > 1 && $i <= $nbPages) : ?>
  				<li class="page-item"><a class="page-link" href="index.php?page=<?= $i ?>"><?= $i ?></a></li>
 			<?php endif; ?>

@@ -21,7 +21,11 @@ class App
 	public function getCurrentUser()
 	{
 		if (isset($_SESSION['id']))
+		{
 			$this->user = UserManager::getUserById($_SESSION['id']);
+			if (!$this->user)
+				unset($_SESSION['id']);
+		}
 	}
 
 	private function connectDb()
