@@ -6,16 +6,17 @@ session_start();
 if (!isset($_SESSION['token']))
 	$_SESSION['token'] = hash('whirlpool', srand(50000, 200000));
 
-define ('DIR_MODEL', __DIR__.'/Model/');
-define ('DIR_VIEW', __DIR__.'/View/');
-define ('DIR_PUBLIC', __DIR__.'/Public/');
 define ('DIR_APP', __DIR__.'/');
+define ('DIR_SRC', __DIR__.'/src/');
+define ('DIR_VIEW', __DIR__.'/templates/');
+define ('DIR_PUBLIC', __DIR__.'/public/');
+define ('DIR_PIC', DIR_PUBLIC.'pictures/');
 
-include_once 'Framework/autoloader.php';
-include_once 'Config/database.php';
+include_once 'config/autoloader.php';
+include_once 'config/database.php';
 
 $APP = new App();
-include_once 'Config/setup.php';
+include_once 'config/setup.php';
 
 $APP->getCurrentUser();
 $APP->router->handleRequest();
