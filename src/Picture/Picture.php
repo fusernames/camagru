@@ -13,7 +13,7 @@ Class Picture
 	public $dstPath = NULL;
 	public $srcPath = NULL;
 
-	public function mergePicture()
+	public function mergeImages()
 	{
 		global $APP;
 		$dst = self::imagecreatefrompath($this->dstPath);
@@ -41,4 +41,5 @@ Class Picture
 				break;
 		}
 	}
+
 }

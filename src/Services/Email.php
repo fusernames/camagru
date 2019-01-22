@@ -30,4 +30,13 @@ Class Email
     $message .= 'http://localhost:8080/camagru/index.php?action=user_reset_password&username='.$user->username.'&hash='.$user->hash.self::NL;
     self::sendEmail($to, $subject, $message);
   }
+
+  public static function sendCommentAlert($user, $comment)
+  {
+    $to = $user->email;
+    $subject = 'Nouveau commentaire sur votre photo';
+    $message = 'Cliquez pour le voir :'.self::NL;
+    $message .= 'http://localhost:8080/camagru/index.php?action=picture_show&id='.$comment->id_picture;
+    self::sendEmail($to, $subject, $message);
+  }
 }

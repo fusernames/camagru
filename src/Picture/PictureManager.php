@@ -12,14 +12,14 @@ Class PictureManager
 	{
 		global $APP;
 		$pic = new Picture();
-		$pic->dstPath = $_FILES['pic']['tmp_name'];
+		$pic->dstPath = $path;
 		$pic->srcPath = DIR_PUBLIC.'filters/'.$_POST['src'];
 		if (self::checkTmp($pic))
 			return 1;
 		$pic->id_user = $APP->user->id;
 		if ($_POST['description'])
 			$pic->description = $_POST['description'];
-		$pic->mergePicture();
+		$pic->mergeImages();
 		$req = $APP->pdo->prepare('INSERT picture (id_user, filename, description) VALUES (:id_user, :filename, :description)');
 		$req->execute([
 			':id_user' => $pic->id_user,

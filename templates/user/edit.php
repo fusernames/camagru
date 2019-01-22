@@ -21,7 +21,7 @@
 	<?php endif; ?>
 	<div class="form-row">
 		<div class="form-group col-lg-6">
-			<label for="password">Nouveau mot de passe</label>
+			<label for="password">Nouveau mot de passe (optionel)</label>
 			<input type="password" name="password" class="form-control" id="password">
 		</div>
 		<div class="form-group col-lg-6">

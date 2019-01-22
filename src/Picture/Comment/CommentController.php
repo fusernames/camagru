@@ -17,9 +17,10 @@ Class CommentController extends AbstractController
 			CommentManager::create();
 		return $this->redirectBack();
 	}
-	
+
 	public function remove($id)
 	{
+		global $APP;
 		Security::accessUserOnly();
 		if (isset($_GET['token']) && $_GET['token'] == $_SESSION['token']) {
 			$comment = CommentManager::getCommentById($id);
@@ -27,16 +28,15 @@ Class CommentController extends AbstractController
 				return Security::notFound();
 			if (!Security::comment($comment, 'remove'))
 				return Security::unauthorized();
-			CommentManager::remove($comment);
 			$req = $APP->pdo->prepare(
-				'DELETE FORM pictures_comment WHERE id = ?)'
+				'DELETE FROM picture_comment WHERE id = ?'
 			);
 			$req->execute([$comment->id]);
 			AlertManager::addAlert('success', 'Commentaire supprime');
 		}
 		return $this->redirectBack();
 	}
-	
+
 	public function like($id)
 	{
 		global $APP;

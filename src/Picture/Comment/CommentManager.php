@@ -3,6 +3,7 @@
 namespace Picture\Comment;
 
 use Services\AlertManager;
+use Services\Email;
 use Picture\PictureManager;
 use Picture\Comment\Comment;
 use User\UserManager;
@@ -26,14 +27,18 @@ Class CommentManager
 			$comment->id_user,
 			$comment->comment
 		]);
+
+		$pic = pictureManager::getPictureById($_POST['id_picture']);
+		$user = userManager::getUserById($pic->id_user);
+		Email::sendCommentAlert($user, $comment);
 		return AlertManager::addAlert('success', 'Commentaire ajoute');
-	}	
+	}
 
 	public static function getCommentsByPictureId($id)
 	{
 		global $APP;
 		$req = $APP->pdo->prepare(
-			'SELECT * FROM picture_comment WHERE id_picture = ?'
+			'SELECT * FROM picture_comment WHERE id_picture = ? ORDER BY creation_date DESC'
 		);
 		$req->execute([$id]);
 		$comments = $req->fetchAll(\PDO::FETCH_CLASS, Comment::class);

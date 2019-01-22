@@ -82,7 +82,7 @@ class Security
 			return $APP->router->redirectToUrl($url);
 	}
 
-	public static function checkForm(array $posts, array $files = [])
+	public static function checkForm(array $posts)
 	{
 		if ($_SERVER['REQUEST_METHOD'] != 'POST')
 			return 1;
@@ -92,10 +92,14 @@ class Security
 			if (!isset($_POST[$post]))
 				return AlertManager::addAlert('danger', 'Formulaire invalide');
 		}
+		return 0;
+	}
+
+	public static function checkFile(array $files)
+	{
 		foreach ($files as $file) {
 			if (!isset($_FILES[$file]))
-				return AlertManager::addAlert('danger', 'Formulaire invalide');
+				return AlertManager::addAlert('danger', 'Fichier invalide');
 		}
-		return 0;
 	}
 }

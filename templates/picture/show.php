@@ -32,7 +32,7 @@
 	</p>
 	<div class="text-right">
 		<?php if (Security::comment($comment, 'remove')) : ?>
-		<a href="index.php?action=picture_comment_remove&id=<?= $comment->id ?>">Supprimer</a> 	| 
+		<a href="index.php?action=picture_comment_remove&id=<?= $comment->id ?>&token=<?= $_SESSION['token'] ?>">Supprimer</a> 	|
 		<?php endif ?>
 		<?php if (Security::comment($comment, 'like')) : ?>
 		<a href="index.php?action=picture_comment_like&id=<?= $comment->id ?>&token=<?= $_SESSION['token'] ?>">J'aime (<?= $comment->nb_likes ?>)</a>
