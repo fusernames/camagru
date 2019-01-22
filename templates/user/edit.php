@@ -29,6 +29,10 @@
 			<input type="password" name="repassword" class="form-control" id="repassword">
 		</div>
 	</div>
+	<div class="form-check form-check-inline">
+  	<input class="form-check-input" name="alert" type="checkbox" id="check" value="1">
+  	<label class="form-check-label" for="check">Alertes sur les nouveaux commentaires</label>
+	</div>
 	<input type="hidden" name="token" value="<?= $_SESSION['token'] ?>">
 	<button type="submit" class="btn btn-primary float-right">Editer</button>
 </form>

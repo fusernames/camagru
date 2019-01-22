@@ -14,6 +14,7 @@ Class User
 	public $role = 'user';
 	public $hash;
 	public $active = 0;
+	public $alert = 1;
 
 	public static function hashWord($pwd)
 	{
