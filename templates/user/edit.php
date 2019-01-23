@@ -1,14 +1,14 @@
-<?php $title = 'Editer '.$user->username ?>
+<?php $title = 'Editer '.htmlspecialchars($user->username) ?>
 <?php ob_start() ?>
 
 <form method="POST" class="clearfix">
 	<div class="form-group">
 		<label for="email">Adresse email</label>
-		<input id="email" type="email" name="email" class="form-control" id="email" value="<?= $user->email ?>">
+		<input id="email" type="email" name="email" class="form-control" id="email" value="<?= htmlspecialchars($user->email) ?>">
 	</div>
 	<div class="form-group">
 		<label for="username">Nom d'utilisateur</label>
-		<input type="text" name="username" class="form-control" id="username" value="<?= $user->username ?>">
+		<input type="text" name="username" class="form-control" id="username" value="<?= htmlspecialchars($user->username) ?>">
 	</div>
 	<?php if (Services\Security::user($user, 'edit_role')) : ?>
 		<div class="form-group">
@@ -30,7 +30,7 @@
 		</div>
 	</div>
 	<div class="form-check form-check-inline">
-  	<input class="form-check-input" name="alert" type="checkbox" id="check" value="1">
+  	<input class="form-check-input" name="alert" type="checkbox" id="check" <?php if ($user->alert) { echo 'checked'; } ?>>
   	<label class="form-check-label" for="check">Alertes sur les nouveaux commentaires</label>
 	</div>
 	<input type="hidden" name="token" value="<?= $_SESSION['token'] ?>">

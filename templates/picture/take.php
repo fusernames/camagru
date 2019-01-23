@@ -5,7 +5,7 @@
 <?php ob_start() ?>
 
 <form method="POST" class="clearfix" enctype="multipart/form-data">
-	<div class="form-group">
+	<div class="form-group" id="camera_form">
 		<label>Prendre une photo</label>
 		<div style="position:relative; width:400px; height:300px;">
 			<video class="d-block" width="400px" height="300px" autoplay></video>
@@ -20,7 +20,7 @@
 		<button type="button" onclick="takeSnapshot();" class="btn btn-primary">Prendre une photo</button>
 		<input id="snapshot_input" type="hidden" name="snapshot"/>
 	</div>
-	<div class="form-group" id="send_img">
+	<div class="form-group" id="img_form">
 		<div class="custom-file">
 			<input name="pic" type="file" class="custom-file-input">
 			<label class="custom-file-label" for="customFile">Choisir une image</label>

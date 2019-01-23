@@ -3,7 +3,7 @@
 <?php ob_start() ?>
 
 <div class="text-center">
-	<img style="max-width:700px; width=100%" src="public/pictures/<?= htmlspecialchars($picture->filename) ?>"/>
+	<img style="max-width:700px; width=100%" src="public/pictures/<?= $picture->filename ?>"/>
 	<br><br>
 	<?php if ($picture->description) : ?>
 	<em><?= $picture->description ?></em><br><br>

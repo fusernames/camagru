@@ -25,14 +25,19 @@ Class UserManager
 			return 1;
 		if ($_POST['password'])
 			$edited->password = User::hashWord($user->password);
+		if (isset($_POST['alert']))
+			$edited->alert = 1;
+		else
+			$edited->alert = 0;
 
-		$req = $APP->pdo->prepare('UPDATE user SET email = :email, username = :username, password = :password, role = :role WHERE id = :id');
+		$req = $APP->pdo->prepare('UPDATE user SET email = :email, username = :username, password = :password, role = :role, alert = :alert WHERE id = :id');
 		$req->execute([
 			':email' => $edited->email,
 			':username' => $edited->username,
 			':password' => $edited->password,
 			':role' => $edited->role,
-			':id' => $edited->id
+			':id' => $edited->id,
+			':alert' => $edited->alert
 		]);
 	}
 

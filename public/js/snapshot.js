@@ -15,9 +15,8 @@ navigator.getUserMedia({video: true}, function(localMediaStream) {
     video.src = window.URL.createObjectURL(localMediaStream);
   }
 }, function(error) {
-    console.log(error);
-  }
-);
+    document.querySelector('camera_form').style.display = 'none';
+});
 
 function previewFilter(radio) {
   document.querySelector('#video_preview').src = 'public/filters/'+radio.value;
@@ -32,5 +31,5 @@ function takeSnapshot() {
   document.getElementById('snapshot_div').style.display = 'block';
   document.getElementById('snapshot_img').src = imageDataURL;
   document.getElementById('snapshot_input').value = imageDataURL;
-  document.getElementById('send_img').style.display = 'none';
+  document.getElementById('img_form').style.display = 'none';
 }
