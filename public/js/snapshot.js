@@ -15,7 +15,7 @@ navigator.getUserMedia({video: true}, function(localMediaStream) {
     video.src = window.URL.createObjectURL(localMediaStream);
   }
 }, function(error) {
-    document.querySelector('camera_form').style.display = 'none';
+    document.querySelector('#camera_form').style.display = 'none';
 });
 
 function previewFilter(radio) {

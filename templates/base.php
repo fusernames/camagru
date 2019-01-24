@@ -5,9 +5,6 @@
  	<title>Camagru · <?= $title ?></title>
  	<!-- link rel="stylesheet" href="style.css" !-->
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-	<?php if (isset($scripts)) : ?>
-	<?= $scripts ?>
-	<?php endif; ?>
 </head>
 <body>
 	<nav class="navbar navbar-expand-lg navbar-light bg-faded">
@@ -49,5 +46,8 @@
       <small><em>alcamagru, marque pas deposée</em></small>
     </div>
   </div>
+  <?php if (isset($scripts)) : ?>
+  <?= $scripts ?>
+  <?php endif; ?>
 </body>
 </html>
