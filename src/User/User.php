@@ -18,7 +18,7 @@ Class User
 
 	public static function hashWord($pwd)
 	{
-		return hash('md5', $pwd);
+		return hash('whirlpool', $pwd);
 	}
 
 	public function checkEmail()

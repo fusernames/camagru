@@ -1,6 +1,10 @@
 <?php
 
 $APP->pdo->query('CREATE DATABASE IF NOT EXISTS camagru');
+$APP->pdo->query('DROP TABLE IF EXISTS picture_comment_like');
+$APP->pdo->query('DROP TABLE IF EXISTS picture_comment');
+$APP->pdo->query('DROP TABLE IF EXISTS picture');
+$APP->pdo->query('DROP TABLE IF EXISTS user');
 $APP->pdo->query('CREATE TABLE IF NOT EXISTS user (
 	id INT AUTO_INCREMENT PRIMARY KEY,
 	email VARCHAR(255) NOT NULL,
@@ -36,10 +40,11 @@ $APP->pdo->query('CREATE TABLE IF NOT EXISTS picture_comment_like (
 	FOREIGN KEY (id_user) REFERENCES user(id) ON DELETE CASCADE,
 	FOREIGN KEY (id_comment) REFERENCES picture_comment(id) ON DELETE CASCADE
 )');
-/*
-$APP->pdo->query('CREATE TRIGGER IF NOT EXISTS inc_nb_comments AFTER INSERT ON picture_comment_like
-FOR EACH ROW
-BEGIN
-	UPDATE picture_comment SET nb_likes = nb_likes + 1 WHERE id = NEW.id_comment;
-END');
-*/
+$passwd = hash('whirlpool', 'admin');
+$req = $APP->pdo->prepare("INSERT INTO user
+	(email, username, password, role, hash, active, alert) VALUES
+	('admin@camagru.fr', 'admin', ?, 'admin', 'admin', 1, 1);
+");
+$req->execute([$passwd]);
+echo 'Installation effecutee.';
+echo '<a href="index.php"><button>Retourner au site</button></a>';

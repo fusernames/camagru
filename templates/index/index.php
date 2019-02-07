@@ -6,6 +6,7 @@
 	<img src="public/pictures/<?= $picture->filename ?>" height="200px"/>
 </a>
 <?php endforeach; ?>
+<?php if ($nbPages != 0) : ?>
 <nav class="mt-4">
 	<ul class="pagination justify-content-end">
 		<?php if ($page > 1) : ?>
@@ -27,6 +28,7 @@
 		<?php endif; ?>
 	</ul>
 </nav>
+<?php endif; ?>
 
 <?php $content = ob_get_clean() ?>
 <?php require DIR_VIEW.'base.php' ?>

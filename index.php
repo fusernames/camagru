@@ -18,7 +18,10 @@ include_once 'config/autoloader.php';
 include_once 'config/database.php';
 
 $APP = new App();
-include_once 'config/setup.php';
-
+if (isset($_GET['action']) && $_GET['action'] == 'setup')
+{
+	include_once 'config/setup.php';
+	die();
+}
 $APP->getCurrentUser();
 $APP->router->handleRequest();
