@@ -8,7 +8,10 @@ Class Email
 
   public static function sendEmail($to, $subject, $message)
   {
-    mail($to, $subject, $message);
+    $headers  = "MIME-Version: 1.0 \n";
+    $headers .= "Content-type: text/html; charset=iso-8859-1 \n";
+    $headers .= "From: Camagru \n";
+    mail($to, $subject, $message, $headers);
   }
 
   public static function sendVerification($user)

@@ -3,6 +3,7 @@
 $APP->pdo->query('CREATE DATABASE IF NOT EXISTS camagru');
 $APP->pdo->query('DROP TABLE IF EXISTS picture_comment_like');
 $APP->pdo->query('DROP TABLE IF EXISTS picture_comment');
+$APP->pdo->query('DROP TABLE IF EXISTS picture_like');
 $APP->pdo->query('DROP TABLE IF EXISTS picture');
 $APP->pdo->query('DROP TABLE IF EXISTS user');
 $APP->pdo->query('CREATE TABLE IF NOT EXISTS user (
@@ -21,6 +22,7 @@ $APP->pdo->query('CREATE TABLE IF NOT EXISTS picture (
 	filename VARCHAR(255) NOT NULL,
 	description VARCHAR(5000) DEFAULT NULL,
 	creation_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+	nb_likes INT NOT NULL DEFAULT 0,
 	FOREIGN KEY (id_user) REFERENCES user(id) ON DELETE CASCADE
 )');
 $APP->pdo->query('CREATE TABLE IF NOT EXISTS picture_comment (
@@ -39,6 +41,13 @@ $APP->pdo->query('CREATE TABLE IF NOT EXISTS picture_comment_like (
 	id_comment INT NOT NULL,
 	FOREIGN KEY (id_user) REFERENCES user(id) ON DELETE CASCADE,
 	FOREIGN KEY (id_comment) REFERENCES picture_comment(id) ON DELETE CASCADE
+)');
+$APP->pdo->query('CREATE TABLE IF NOT EXISTS picture_like (
+	id INT AUTO_INCREMENT PRIMARY KEY,
+	id_user INT NOT NULL,
+	id_picture INT NOT NULL,
+	FOREIGN KEY (id_user) REFERENCES user(id) ON DELETE CASCADE,
+	FOREIGN KEY (id_picture) REFERENCES picture(id) ON DELETE CASCADE
 )');
 $passwd = hash('whirlpool', 'admin');
 $req = $APP->pdo->prepare("INSERT INTO user

@@ -85,6 +85,12 @@ Class Router
 			case 'picture_remove':
 				$this->pictureController->remove($this->getParam('id'));
 				break;
+			case 'picture_unlike':
+				$this->pictureController->unlike($this->getParam('id'));
+				break;
+			case 'picture_like':
+				$this->pictureController->like($this->getParam('id'));
+				break;
 			case 'picture_comment_create':
 				$this->pictureCommentController->create();
 				break;

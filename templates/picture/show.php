@@ -12,6 +12,13 @@
 	<?php if (Security::picture($picture, 'remove')) : ?>
 	<br><a href="index.php?action=picture_remove&id=<?= $picture->id ?>&token=<?= $_SESSION['token'] ?>">Supprimer</a>
 	<?php endif; ?>
+	<?php if (Security::picture($picture, 'like')) : ?>
+	<a href="index.php?action=picture_like&id=<?= $picture->id ?>&token=<?= $_SESSION['token'] ?>">J'aime (<?= $picture->nb_likes ?>)</a>
+	<?php elseif (Security::picture($picture, 'unlike')) : ?>
+	<a href="index.php?action=picture_unlike&id=<?= $picture->id ?>&token=<?= $_SESSION['token'] ?>">Je n'aime plus (<?= $picture->nb_likes ?>)</a>
+	<?php else : ?>
+		<?= $picture->nb_likes ?> aiment ca
+	<?php endif ?>
 </div>
 
 <form method="POST" action="index.php?action=picture_comment_create" class="clearfix">

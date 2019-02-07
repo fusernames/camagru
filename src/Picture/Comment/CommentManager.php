@@ -32,8 +32,12 @@ Class CommentManager
 
 		$pic = pictureManager::getPictureById($_POST['id_picture']);
 		$user = userManager::getUserById($pic->id_user);
-		if ($user->alert)
+		if ($user->alert === 1)
+		{
 			Email::sendCommentAlert($user, $comment);
+			var_dump($user);
+			die();
+		}
 		return AlertManager::addAlert('success', 'Commentaire ajouté');
 	}
 

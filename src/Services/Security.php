@@ -4,6 +4,7 @@ namespace Services;
 
 use Services\AlertManager;
 use Picture\Comment\CommentManager;
+use Picture\PictureManager;
 
 class Security
 {
@@ -49,9 +50,18 @@ class Security
 		global $APP;
 		if (!$APP->user)
 			return FALSE;
-		if ($action == 'remove')
+		if ($action == 'remove') {
 			if ($APP->user->role == 'admin' || $picture->id_user == $APP->user->id)
 				return TRUE;
+		}
+		if ($action == 'like') {
+			if (!PictureManager::getLike($picture->id, $APP->user->id))
+				return TRUE;
+		}
+		if ($action == 'unlike') {
+			if (PictureManager::getLike($picture->id, $APP->user->id))
+				return TRUE;
+		}
 		return FALSE;
 	}
 

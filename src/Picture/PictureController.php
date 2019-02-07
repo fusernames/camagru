@@ -63,4 +63,42 @@ Class PictureController extends AbstractController
 		}
 		$this->redirectBack();
 	}
+
+	public function like($id)
+	{
+		global $APP;
+		Security::accessUserOnly();
+		if (isset($_GET['token']) && $_GET['token'] == $_SESSION['token']) {
+			$picture = PictureManager::getPictureById($id);
+			if (!$picture)
+				return Security::notFound();
+			if (!Security::picture($picture, 'like'))
+				return Security::unauthorized();
+			$req = $APP->pdo->prepare(
+				'INSERT INTO picture_like (id_user, id_picture) VALUES (?, ?)'
+			);
+			$req->execute([$APP->user->id, $picture->id]);
+			$APP->pdo->query("UPDATE picture SET nb_likes = nb_likes + 1 WHERE id = $picture->id");
+		}
+		return $this->redirectBack();
+	}
+
+	public function unlike($id)
+	{
+		global $APP;
+		Security::accessUserOnly();
+		if (isset($_GET['token']) && $_GET['token'] == $_SESSION['token']) {
+			$picture = PictureManager::getPictureById($id);
+			if (!$picture)
+				return Security::notFound();
+			if (!Security::picture($picture, 'unlike'))
+				return Security::unauthorized();
+			$req = $APP->pdo->prepare(
+				'DELETE FROM picture_like WHERE id_user = ? AND id_picture = ?'
+			);
+			$req->execute([$APP->user->id, $picture->id]);
+			$APP->pdo->query("UPDATE picture SET nb_likes = nb_likes - 1 WHERE id = $picture->id");
+		}
+		return $this->redirectBack();
+	}
 }

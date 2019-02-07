@@ -18,9 +18,16 @@ navigator.getUserMedia({video: true}, function(localMediaStream) {
     document.querySelector('#camera_form').style.display = 'none';
 });
 
+function enableButton() {
+  var btn = document.getElementById('button');
+  console.log(btn);
+  btn.removeAttribute('disabled');
+}
+
 function previewFilter(radio) {
   document.querySelector('#video_preview').src = 'public/filters/'+radio.value;
   document.querySelector('#snapshot_preview').src = 'public/filters/'+radio.value;
+  document.getElementById('button').removeAttribute('disabled');
 }
 
 function takeSnapshot() {

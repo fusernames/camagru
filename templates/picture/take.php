@@ -27,10 +27,8 @@
 		<input id="snapshot_input" type="hidden" name="snapshot"/>
 	</div>
 	<div class="form-group" id="img_form">
-		<div class="custom-file">
-			<input name="pic" type="file" class="custom-file-input">
-			<label class="custom-file-label" for="customFile">Choisir une image</label>
-		</div>
+			<input name="pic" type="file" accept="image/*">
+			<label for="customFile">Choisir une image</label>
 	</div>
 	<div class="form-group">
 		<div><label>Filtres</label></div>
@@ -56,7 +54,7 @@
 		<textarea name="description" class="form-control"></textarea>
 	</div>
 	<input type="hidden" name="token" value="<?= $_SESSION['token'] ?>">
-	<button type="submit" class="btn btn-primary float-right">Envoyer</button>
+	<button id="button" type="submit" class="btn btn-primary float-right" disabled="true">Envoyer</button>
 </form>
 
 <?php $content = ob_get_clean() ?>

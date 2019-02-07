@@ -11,6 +11,7 @@ Class Picture
 	public $description = NULL;
 	public $dstPath = NULL;
 	public $srcPath = NULL;
+	public $nb_likes = 0;
 
 	public function mergeImages()
 	{

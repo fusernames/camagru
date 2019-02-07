@@ -53,4 +53,15 @@ Class PictureManager
 		$req->execute([$id]);
 		return $req->fetchAll(\PDO::FETCH_CLASS, Picture::class);
 	}
+
+	public static function getLike($id_picture, $id_user)
+	{
+		global $APP;
+		$req = $APP->pdo->prepare(
+			'SELECT count(*) FROM picture_like WHERE id_picture = ? AND id_user = ? LIMIT 1'
+		);
+		$req->execute([$id_picture, $id_user]);
+		$like = $req->fetchColumn();
+		return $like;
+	}
 }
