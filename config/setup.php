@@ -20,7 +20,7 @@ $APP->pdo->query('CREATE TABLE IF NOT EXISTS picture (
 	id_user INT NOT NULL,
 	filename VARCHAR(255) NOT NULL,
 	description VARCHAR(5000) DEFAULT NULL,
-	creation_date TIMESTAMP NOT NULL,
+	creation_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	FOREIGN KEY (id_user) REFERENCES user(id) ON DELETE CASCADE
 )');
 $APP->pdo->query('CREATE TABLE IF NOT EXISTS picture_comment (
@@ -28,7 +28,7 @@ $APP->pdo->query('CREATE TABLE IF NOT EXISTS picture_comment (
 	id_user INT NOT NULL,
 	id_picture INT NOT NULL,
 	comment VARCHAR(5000) NOT NULL,
-	creation_date TIMESTAMP NOT NULL,
+	creation_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	nb_likes INT NOT NULL DEFAULT 0,
 	FOREIGN KEY (id_user) REFERENCES user(id) ON DELETE CASCADE,
 	FOREIGN KEY (id_picture) REFERENCES picture(id) ON DELETE CASCADE

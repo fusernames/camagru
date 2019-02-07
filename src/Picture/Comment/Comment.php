@@ -8,6 +8,5 @@ Class Comment
 	public $id_picture;
 	public $id_user;
 	public $comment;
-	public $creation_date;
 	public $nb_likes = 0;
 }

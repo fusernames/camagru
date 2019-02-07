@@ -14,6 +14,8 @@ Class CommentManager
 	{
 		global $APP;
 		$comment = new Comment();
+		if (!isset($_POST['comment']) || $_POST['comment'] === '')
+			return AlertManager::addAlert('danger', 'Message trop court');
 		$comment->id_picture = $_POST['id_picture'];
 		$comment->id_user = $APP->user->id;
 		$comment->comment = $_POST['comment'];
@@ -32,7 +34,7 @@ Class CommentManager
 		$user = userManager::getUserById($pic->id_user);
 		if ($user->alert)
 			Email::sendCommentAlert($user, $comment);
-		return AlertManager::addAlert('success', 'Commentaire ajoute');
+		return AlertManager::addAlert('success', 'Commentaire ajouté');
 	}
 
 	public static function getCommentsByPictureId($id)

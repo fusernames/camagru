@@ -37,6 +37,8 @@ Class User
 	{
 		if (!$this->password || strlen($this->password) < 5)
 			return AlertManager::addAlert('danger', 'Mot de passe invalide');
+		if (!preg_match('/[\'^£$%&*()}{@#~?><>,|=_+¬-]/', $this->password))
+			return AlertManager::addAlert('danger', 'Aucun caractère special dans le mot de passe');
 		if ($this->repassword != $this->password)
 			return AlertManager::addAlert('danger', 'Mots de passe differents');
 	}
@@ -44,14 +46,18 @@ Class User
 	public function usernameExists()
 	{
 		global $APP;
-		if ($APP->pdo->query('SELECT username FROM user WHERE username = \''. $this->username .'\'')->fetchColumn())
+		$req = $APP->pdo->prepare('SELECT username FROM user WHERE username = ?');
+		$req->execute([$this->username]);
+		if ($req->fetchColumn())
 			return AlertManager::addAlert('danger', 'Ce nom d\'utilisateur est deja utilisé');
 	}
 
 	public function emailExists()
 	{
 		global $APP;
-		if ($APP->pdo->query('SELECT email FROM user WHERE email = \''. $this->email .'\'')->fetchColumn())
+		$req = $APP->pdo->prepare('SELECT email FROM user WHERE email = ?');
+		$req->execute([$this->email]);
+		if ($req->fetchColumn())
 			return AlertManager::addAlert('danger', 'Cet email est deja utilisé');
 	}
 }

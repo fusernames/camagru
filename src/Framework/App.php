@@ -36,10 +36,9 @@ class App
 		try {
 			$this->pdo = new \PDO($DB_DSN, $DB_USER, $DB_PASSWORD);
 			$this->pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
+			$this->pdo->setAttribute(\PDO::ATTR_EMULATE_PREPARES, false);
 		} catch (PDOException $e) {
 			die('Échec lors de la connexion : ' . $e->getMessage());
 		}
 	}
 }
-
-?>

@@ -45,4 +45,12 @@ Class PictureManager
 		$req->execute([$id]);
 		return $req->fetchObject(Picture::class);
 	}
+
+	public static function getPicturesById($id)
+	{
+		global $APP;
+		$req = $APP->pdo->prepare('SELECT * FROM picture WHERE id_user = ? ORDER BY creation_date DESC');
+		$req->execute([$id]);
+		return $req->fetchAll(\PDO::FETCH_CLASS, Picture::class);
+	}
 }

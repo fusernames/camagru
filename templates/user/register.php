@@ -14,6 +14,7 @@
 		<div class="form-group col-lg-6">
 			<label for="password">Mot de passe</label>
 			<input type="password" name="password" class="form-control" id="password">
+			<small>mimimum 5 caractères dont 1 caractère spécial</small>
 		</div>
 		<div class="form-group col-lg-6">
 			<label for="repassword">Retapez mdp</label>

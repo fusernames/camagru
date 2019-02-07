@@ -11,7 +11,7 @@ Class IndexController extends AbstractController
 {
 	public function index($page) {
 		global $APP;
-		$nbPerPage = 4;
+		$nbPerPage = 8;
 		$nbRes = $APP->pdo->query('SELECT count(*) FROM picture')->fetchColumn();
 		$nbPages = ceil($nbRes/$nbPerPage);
 		if ($page > $nbPages)

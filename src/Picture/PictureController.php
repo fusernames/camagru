@@ -26,6 +26,7 @@ Class PictureController extends AbstractController
 
 	public function take()
 	{
+		global $APP;
 		Security::AccessUserOnly();
 		if (!Security::checkForm(['src', 'description', 'snapshot'])) {
 			if (empty($_POST['snapshot'])) {
@@ -40,7 +41,10 @@ Class PictureController extends AbstractController
 				unlink(DIR_TMP.$filename);
 			}
 		}
-		return $this->render('picture/take.php');
+		$pictures = PictureManager::getPicturesById($APP->user->id);
+		return $this->render('picture/take.php', [
+			'pictures' => $pictures
+		]);
 	}
 
 	public function remove($id)
@@ -53,7 +57,7 @@ Class PictureController extends AbstractController
 				return Security::notFound();
 			if (!Security::picture($picture, 'remove'))
 				return Security::unauthorized();
-			unlink(DIR_PIC.$picture->name);
+			unlink(DIR_PIC.$picture->filename);
 			$APP->pdo->query("DELETE FROM picture WHERE id = $picture->id");
 			AlertManager::addAlert('success', 'Photo supprimee');
 		}

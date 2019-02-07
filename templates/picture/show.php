@@ -6,7 +6,7 @@
 	<img style="max-width:700px; width=100%" src="public/pictures/<?= $picture->filename ?>"/>
 	<br><br>
 	<?php if ($picture->description) : ?>
-	<em><?= $picture->description ?></em><br><br>
+	<em><?= htmlspecialchars($picture->description) ?></em><br><br>
 	<?php endif; ?>
 	Auteur : <b><?= htmlspecialchars($picture->user->username) ?></b> | <?= $picture->creation_date ?>
 	<?php if (Security::picture($picture, 'remove')) : ?>

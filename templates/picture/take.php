@@ -5,6 +5,12 @@
 <?php ob_start() ?>
 
 <form method="POST" class="clearfix" enctype="multipart/form-data">
+	<label>Vos dernieres photos</label>
+	<div class="mb-2">
+		<?php foreach($pictures as $picture) : ?>
+			<a href="index.php?action=picture_show&id=<?= $picture->id ?>"><img src="public/pictures/<?= $picture->filename ?>" height="100px"/></a>
+		<?php endforeach ?>
+	</div>
 	<div class="form-group" id="camera_form">
 		<label>Prendre une photo</label>
 		<div style="position:relative; width:400px; height:300px;">

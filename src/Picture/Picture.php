@@ -9,7 +9,6 @@ Class Picture
 	public $id_user;
 	public $user = NULL;
 	public $description = NULL;
-	public $creation_date;
 	public $dstPath = NULL;
 	public $srcPath = NULL;
 
@@ -19,7 +18,7 @@ Class Picture
 		$dst = self::imagecreatefrompath($this->dstPath);
 		$src = self::imagecreatefrompath($this->srcPath);
 		imagecopy($dst, $src, 0, 0, 0, 0, imagesx($src), imagesy($src));
-		$filename = $APP->user->username.'_'.time().'.png';
+		$filename = time().'.png';
 		imagepng($dst, DIR_PUBLIC.'pictures/'.$filename);
 		$this->filename = $filename;
 	}
