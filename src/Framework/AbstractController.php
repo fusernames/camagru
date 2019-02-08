@@ -21,6 +21,9 @@ abstract Class AbstractController
 
 	public function redirectBack()
 	{
-		header('Location: '.$_SERVER['HTTP_REFERER']);
+		if (isset($_SERVER['HTTP_REFERER']))
+			header('Location: '.$_SERVER['HTTP_REFERER']);
+		else
+			self::redirectToUrl('index');
 	}
 }

@@ -103,6 +103,9 @@ Class Router
 			case 'picture_comment_unlike':
 				$this->pictureCommentController->unlike($this->getParam('id'));
 				break;
+			default :
+				echo 'Cette page n\'existe pas';
+				break;
 		}
 	}
 }

@@ -35,8 +35,6 @@ Class CommentManager
 		if ($user->alert === 1)
 		{
 			Email::sendCommentAlert($user, $comment);
-			var_dump($user);
-			die();
 		}
 		return AlertManager::addAlert('success', 'Commentaire ajouté');
 	}
